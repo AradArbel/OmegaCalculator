@@ -2,6 +2,7 @@ import operators
 
 MAX_PRIORITY = 6
 
+
 class OperatorX:
 
     def __init__(self, sign, index):
@@ -22,6 +23,3 @@ class OperatorX:
 
     def get_sign(self):
         return self.__sign
-
-
-
