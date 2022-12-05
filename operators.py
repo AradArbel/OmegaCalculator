@@ -1,6 +1,3 @@
-# operators_signs = {'Addition': '+', 'subtraction': '-', 'Multiplication': '*', 'Division': '/', 'Power': '^',
-#                    'Modulo': '%', 'Maximum': '$', 'Minimum': '&', 'Average': '@', 'Negative': '~', 'Factorial': '!',
-#                    'Sum_digit': '#'}
 operators_signs = {'+': 'addition', '-': 'subtraction', '*': 'multiplication', '/': 'division', '^': 'power',
                    '%': 'modulo', '$': 'maximum', '&': 'minimum', '@': 'average', '~': 'negative', '!': 'factorial',
                    '#': 'sum_digit'}
