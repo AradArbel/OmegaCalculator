@@ -1,88 +1,89 @@
-import exceptions
-from operatorx import OperatorX
+from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedParenthesis, UnsupportedChar, EmptyInput
+from custom_operator import Operator
+from expression_utils import remove_spaces, get_next, possible_places, LEGAL_CHARACTERS
 
 
-LEGAL_CHARS = "1234567890+-*/^%$&@~!#.()"
-OPERATORS = "+-*/^%$&@~!#"
+def validate_priority(sub_expressions: list, priority) -> list:
+    """
+    validates operators with this priority
+    :param sub_expressions: list of all sub expression
+    :param priority: priority to validate operators of
+    :return: None
+    """
+    updated_sub_expressions = []
+    i = 0
+    while i < len(sub_expressions):
+        if type(sub_expressions[i]) is Operator and sub_expressions[i].get_priority() == priority:
+            places = possible_places(sub_expressions, i)
+            if "middle" in sub_expressions[i].get_places():
+                if "middle" not in places and ["middle"] == sub_expressions[i].get_places():
+                    raise InsufficientArguments(places, sub_expressions[i].get_sign())
+                else:
+                    i += 2
+                    continue
+            if "left" in sub_expressions[i].get_places():
+                if "left" not in places and "right" not in sub_expressions[i].get_places():
+                    raise InsufficientArguments(places, sub_expressions[i].get_sign())
+                else:
+                    updated_sub_expressions.append(sub_expressions[i + 1])
+                    i += 2
+                    continue
+            if "right" in sub_expressions[i].get_places():
+                if "right" not in places:
+                    raise InsufficientArguments(places, sub_expressions[i].get_sign())
+                else:
+                    if type(updated_sub_expressions[-1]) is not str:
+                        updated_sub_expressions.append(sub_expressions[i - 1])
+        elif type(sub_expressions[i]) is str:
+            if len(updated_sub_expressions) > 0 and type(updated_sub_expressions[-1]) is not Operator:
+                raise ConsecutiveArguments
+            else:
+                updated_sub_expressions.append(sub_expressions[i])
+        else:
+            updated_sub_expressions.append(sub_expressions[i])
+        i += 1
+    return updated_sub_expressions[:]
 
 
-def validate(exp: str):
-    exp = "".join(exp.split(" "))
+def validate(exp: str) -> None:
+    """
+    Goes over the expression and raises exception if it is illegal
+    :param exp: expression to validate
+    :return: None
+    """
+    if exp == "":
+        raise EmptyInput
+    exp = remove_spaces(exp)
     if not balanced_parentheses(exp):
-        raise exceptions.UnBalancedParenthesis
+        raise UnBalancedParenthesis
     for c in exp:
-        if c not in LEGAL_CHARS:
-            raise Exception("todo change this")
+        if c not in LEGAL_CHARACTERS:
+            raise UnsupportedChar(c)
+    sub_expressions = []
     position = 0
-    sub_exps = []
-    updated_sub_exps = []
     while position < len(exp):
         position, sub_exp = get_next(exp, position)
         if type(sub_exp) is str and sub_exp[0] == "(":
             validate(sub_exp[1:-1])
-            sub_exps.append('1')
+            sub_expressions.append('1')
         else:
-            sub_exps.append(sub_exp)
+            sub_expressions.append(sub_exp)
     for j in range(6, 0, -1):
-        i = 0
-        while i < len(sub_exps):
-            if type(sub_exps[i]) is OperatorX and sub_exps[i].get_priority() == j:
-                if "middle" in sub_exps[i].get_places():
-                    if (i == 0 or i == len(sub_exps) - 1 or type(sub_exps[i+1]) is not str or type(sub_exps[i-1]) is not str) and \
-                            "left" not in sub_exps[i].get_places() and "right" not in sub_exps[i].get_places():
-                            raise Exception(f"Error: operator {sub_exps[i].get_sign()} must have argument to the right and to the left")
-                    else:
-                        i += 2
-                        continue
-                if "left" in sub_exps[i].get_places():
-                    if (i == len(sub_exps) - 1 or type(sub_exps[i+1]) is not str) and "right" not in sub_exps[i].get_places():
-                            raise Exception(f"Error: operator {sub_exps[i].get_sign()} must have argument to the right")
-                    else:
-                        updated_sub_exps.append(sub_exps[i+1])
-                        continue
-                if "right" in sub_exps[i].get_places():
-                    if i == 0 or type(sub_exps[i-1]) is not str:
-                        raise Exception(f"Error: operator {sub_exps[i].get_sign()} must have argument to the left")
-                    else:
-                        if type(updated_sub_exps[-1]) is not str:
-                            updated_sub_exps.append(sub_exps[i-1])
-
-            elif type(sub_exps[i]) is str:
-                if len(updated_sub_exps) > 0 and type(updated_sub_exps[-1]) is not OperatorX:
-                    raise Exception("Error: consecutive arguments without binary operator between them")
-                else:
-                    updated_sub_exps.append(sub_exps[i])
-            else:
-                updated_sub_exps.append(sub_exps[i])
-            i += 1
-        sub_exps = updated_sub_exps[:]
-        updated_sub_exps = []
+        sub_expressions = validate_priority(sub_expressions, j)
 
 
-def get_next(exp: str, position: int):
-    if exp[position] in OPERATORS:
-        return position + 1, OperatorX(exp[position])
-    i = position
-    s = ""
-    if exp[i] == "(":
-        while i < len(exp) and exp[i] != ")":
-            s += exp[i]
-            i += 1
-        s += exp[i]
-        return i+1, s
-    while i < len(exp) and exp[i] not in OPERATORS:
-        s += exp[i]
-        i += 1
-    return i, s
-
-
-def balanced_parentheses(exp: str):
+def balanced_parentheses(exp: str) -> bool:
+    """
+    validates legal parentheses
+    :param exp: expression to validate
+    :return: True if parentheses are legal, False otherwise
+    """
     balance = 0
     for c in exp:
         if c == "(":
             balance -= 1
         elif c == ")":
-            if balance > 0:
+            if balance == 0:
                 return False
             balance += 1
     return balance == 0

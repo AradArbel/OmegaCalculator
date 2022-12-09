@@ -1,6 +1,4 @@
-operators_signs = {'+': 'addition', '-': 'subtraction', '*': 'multiplication', '/': 'division', '^': 'power',
-                   '%': 'modulo', '$': 'maximum', '&': 'minimum', '@': 'average', '~': 'negative', '!': 'factorial',
-                   '#': 'sum_digit'}
+from exceptions import DivisionByZero, ModuloByZero, NegativeFactorial, FloatFactorial
 
 
 def addition(operand1: float, operand2: float) -> float:
@@ -16,6 +14,8 @@ def multiplication(operand1: float, operand2: float) -> float:
 
 
 def division(operand1: float, operand2: float) -> float:
+    if float(operand2) == 0:
+        raise DivisionByZero
     return float(operand1) / float(operand2)
 
 
@@ -24,6 +24,8 @@ def power(base: float, exponent: float) -> float:
 
 
 def modulo(operand1: float, operand2: float) -> float:
+    if float(operand2) == 0:
+        raise ModuloByZero
     return float(operand1) % float(operand2)
 
 
@@ -44,16 +46,24 @@ def negative(operand1: float) -> float:
 
 
 def factorial(operand1: float) -> float:
+    if float(operand1) < 0:
+        raise NegativeFactorial
+    if int(float(operand1)) != float(operand1):
+        raise FloatFactorial
     fact = 1
     for i in range(1, int(operand1) + 1):
         fact = fact * i
     return float(fact)
 
 
-def sum_digit(operand1: float) -> float:
+def sum_digit(operand1: any) -> float:
+    operand1 = str(operand1)
     digit_sum = 0
+    sign = 1
+    if operand1[0] == '-':
+        sign = -1
     # Single line that calculates sum of digits
-    while operand1 > 0:
-        digit_sum += int(operand1 % 10)
-        operand1 = int(operand1 / 10)
-    return digit_sum
+    for i in range(len(operand1)):
+        if operand1[i] not in ".-":
+            digit_sum += float(operand1[i])
+    return sign * digit_sum

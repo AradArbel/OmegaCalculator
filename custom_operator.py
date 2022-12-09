@@ -1,17 +1,17 @@
-import operators
-
-# MAX_PRIORITY = 6
-
 OPERATORS_PRIORITY = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3,
                       '%': 4, '$': 5, '&': 5, '@': 6, '~': 6, '!': 6,
                       '#': 6}
+
 OPERATORS_PLACE = {'+': ['middle'], '-': ['middle', 'left'], '*': ['middle'], '/': ['middle'], '^': ['middle'],
                    '%': ['middle'], '$': ['middle'], '&': ['middle'], '@': ['middle'], '~': ['left'], '!': ['right'],
                    '#': ['right']}
 
+OPERATORS_NAME = {'+': 'addition', '-': 'subtraction', '*': 'multiplication', '/': 'division', '^': 'power',
+                  '%': 'modulo', '$': 'maximum', '&': 'minimum', '@': 'average', '~': 'negative', '!': 'factorial',
+                  '#': 'sum_digit'}
 
-class OperatorX:
 
+class Operator:
     def __init__(self, sign):
         self.__sign = sign
         self.__priority = OPERATORS_PRIORITY[sign]
