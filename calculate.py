@@ -2,6 +2,11 @@ import operators
 from custom_operator import Operator, OPERATORS_NAME
 from expression_utils import remove_spaces, get_next, possible_places
 
+"""
+Auther: Arad Arbel
+Description: this module contains the calculate functions which solving the equation using all the helper functions below.
+"""
+
 
 def calculate(exp: str) -> float:
     """
@@ -11,10 +16,10 @@ def calculate(exp: str) -> float:
     """
     exp = remove_spaces(exp)
     if exp[0] == '-' and len(exp) > 1 and exp[1] != "(":
-        return calculate("-("+exp[1:]+")")
+        return calculate("-(" + exp[1:] + ")")
     sub_expressions = __to_sub_expressions(exp)
-    for j in range(6, 0, -1):
-        sub_expressions = __calculate_priority(sub_expressions, j)
+    for priority in range(6, 0, -1):
+        sub_expressions = __calculate_priority(sub_expressions, priority)
     return sub_expressions[0]
 
 
@@ -47,27 +52,27 @@ def __calculate_priority(sub_exps, priority):
     :return: the evaluated sub expressions
     """
     updated_sub_exps = []
-    i = 0
-    while i < len(sub_exps):
-        if type(sub_exps[i]) is Operator and sub_exps[i].get_priority() == priority:
-            op_func = getattr(operators, OPERATORS_NAME[sub_exps[i].get_sign()])
-            places = possible_places(sub_exps, i)
-            if "middle" in places and "middle" in sub_exps[i].get_places():
-                updated_sub_exps[-1] = (op_func(updated_sub_exps[-1], sub_exps[i + 1]))
-                i += 2
+    current_length = 0
+    while current_length < len(sub_exps):
+        if type(sub_exps[current_length]) is Operator and sub_exps[current_length].get_priority() == priority:
+            op_func = getattr(operators, OPERATORS_NAME[sub_exps[current_length].get_sign()])
+            places = possible_places(sub_exps, current_length)
+            if "middle" in places and "middle" in sub_exps[current_length].get_places():
+                updated_sub_exps[-1] = (op_func(updated_sub_exps[-1], sub_exps[current_length + 1]))
+                current_length += 2
                 continue
-            if "left" in places and "left" in sub_exps[i].get_places():
-                if sub_exps[i].get_sign() == '-':
-                    updated_sub_exps.append('-' + str(sub_exps[i + 1]))
+            if "left" in places and "left" in sub_exps[current_length].get_places():
+                if sub_exps[current_length].get_sign() == '-':
+                    updated_sub_exps.append('-' + str(sub_exps[current_length + 1]))
                 else:
-                    updated_sub_exps.append(op_func(sub_exps[i + 1]))
-                i += 2
+                    updated_sub_exps.append(op_func(sub_exps[current_length + 1]))
+                current_length += 2
                 continue
-            if "right" in places and "right" in sub_exps[i].get_places():
+            if "right" in places and "right" in sub_exps[current_length].get_places():
                 updated_sub_exps[-1] = op_func(updated_sub_exps[-1])
         else:
-            updated_sub_exps.append(sub_exps[i])
-        i += 1
+            updated_sub_exps.append(sub_exps[current_length])
+        current_length += 1
     return updated_sub_exps[:]
 
 
@@ -110,7 +115,7 @@ def __cancel_minus_signs(sub_exps: list) -> list:
                 if num_minuses % 2 == 1:  # if odd number of minuses then put a minus, else skip
                     lst.append(Operator('-'))
             else:
-                if num_minuses % 2 == 1:   # if odd number of minuses then put a minus, else put a plus
+                if num_minuses % 2 == 1:  # if odd number of minuses then put a minus, else put a plus
                     lst.append(Operator('-'))
                 elif type(lst[-1]) is not Operator:
                     lst.append(Operator('+'))

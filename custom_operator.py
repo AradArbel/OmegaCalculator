@@ -1,3 +1,8 @@
+"""
+Auther: Arad Arbel
+Description: this module contains the operator class and operators dictionaries by there priority, place and name.
+"""
+
 OPERATORS_PRIORITY = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3,
                       '%': 4, '$': 5, '&': 5, '@': 6, '~': 6, '!': 6,
                       '#': 6}

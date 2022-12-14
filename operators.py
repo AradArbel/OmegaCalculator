@@ -1,5 +1,10 @@
 from exceptions import DivisionByZero, ModuloByZero, NegativeFactorial, FloatFactorial
 
+"""
+Auther: Arad Arbel
+Description: this module contains the all the operators calculation functions .
+"""
+
 
 def addition(operand1: float, operand2: float) -> float:
     return float(operand1) + float(operand2)

@@ -1,6 +1,11 @@
 from custom_operator import Operator, OPERATORS_NAME
 from exceptions import TooManyDecimalPoints
 
+"""
+Auther: Arad Arbel
+Description: this module contains utility functions that handle the equations.
+ """
+
 LEGAL_CHARACTERS = "1234567890()." + "".join(OPERATORS_NAME.keys())
 
 

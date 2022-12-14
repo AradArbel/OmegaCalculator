@@ -2,6 +2,12 @@ from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedPa
 from custom_operator import Operator
 from expression_utils import remove_spaces, get_next, possible_places, LEGAL_CHARACTERS
 
+"""
+Auther: Arad Arbel
+Description: this module contains the validation functions which check if the equation is 
+written according to the standard rules.
+ """
+
 
 def validate_priority(sub_expressions: list, priority) -> list:
     """
@@ -11,37 +17,38 @@ def validate_priority(sub_expressions: list, priority) -> list:
     :return: None
     """
     updated_sub_expressions = []
-    i = 0
-    while i < len(sub_expressions):
-        if type(sub_expressions[i]) is Operator and sub_expressions[i].get_priority() == priority:
-            places = possible_places(sub_expressions, i)
-            if "middle" in sub_expressions[i].get_places():
-                if "middle" not in places and ["middle"] == sub_expressions[i].get_places():
-                    raise InsufficientArguments(places, sub_expressions[i].get_sign())
+    current_place = 0
+    while current_place < len(sub_expressions):
+        if type(sub_expressions[current_place]) is Operator\
+                and sub_expressions[current_place].get_priority() == priority:
+            places = possible_places(sub_expressions, current_place)
+            if "middle" in sub_expressions[current_place].get_places():
+                if "middle" not in places and ["middle"] == sub_expressions[current_place].get_places():
+                    raise InsufficientArguments(places, sub_expressions[current_place].get_sign())
                 else:
-                    i += 2
+                    current_place += 2
                     continue
-            if "left" in sub_expressions[i].get_places():
-                if "left" not in places and "right" not in sub_expressions[i].get_places():
-                    raise InsufficientArguments(places, sub_expressions[i].get_sign())
+            if "left" in sub_expressions[current_place].get_places():
+                if "left" not in places and "right" not in sub_expressions[current_place].get_places():
+                    raise InsufficientArguments(places, sub_expressions[current_place].get_sign())
                 else:
-                    updated_sub_expressions.append(sub_expressions[i + 1])
-                    i += 2
+                    updated_sub_expressions.append(sub_expressions[current_place + 1])
+                    current_place += 2
                     continue
-            if "right" in sub_expressions[i].get_places():
+            if "right" in sub_expressions[current_place].get_places():
                 if "right" not in places:
-                    raise InsufficientArguments(places, sub_expressions[i].get_sign())
+                    raise InsufficientArguments(places, sub_expressions[current_place].get_sign())
                 else:
                     if type(updated_sub_expressions[-1]) is not str:
-                        updated_sub_expressions.append(sub_expressions[i - 1])
-        elif type(sub_expressions[i]) is str:
+                        updated_sub_expressions.append(sub_expressions[current_place - 1])
+        elif type(sub_expressions[current_place]) is str:
             if len(updated_sub_expressions) > 0 and type(updated_sub_expressions[-1]) is not Operator:
                 raise ConsecutiveArguments
             else:
-                updated_sub_expressions.append(sub_expressions[i])
+                updated_sub_expressions.append(sub_expressions[current_place])
         else:
-            updated_sub_expressions.append(sub_expressions[i])
-        i += 1
+            updated_sub_expressions.append(sub_expressions[current_place])
+        current_place += 1
     return updated_sub_expressions[:]
 
 
@@ -56,9 +63,9 @@ def validate(exp: str) -> None:
     exp = remove_spaces(exp)
     if not balanced_parentheses(exp):
         raise UnBalancedParenthesis
-    for c in exp:
-        if c not in LEGAL_CHARACTERS:
-            raise UnsupportedChar(c)
+    for char in exp:
+        if char not in LEGAL_CHARACTERS:
+            raise UnsupportedChar(char)
     sub_expressions = []
     position = 0
     while position < len(exp):
@@ -68,8 +75,8 @@ def validate(exp: str) -> None:
             sub_expressions.append('1')
         else:
             sub_expressions.append(sub_exp)
-    for j in range(6, 0, -1):
-        sub_expressions = validate_priority(sub_expressions, j)
+    for priority_level in range(6, 0, -1):
+        sub_expressions = validate_priority(sub_expressions, priority_level)
 
 
 def balanced_parentheses(exp: str) -> bool:
@@ -79,12 +86,11 @@ def balanced_parentheses(exp: str) -> bool:
     :return: True if parentheses are legal, False otherwise
     """
     balance = 0
-    for c in exp:
-        if c == "(":
+    for char in exp:
+        if char == "(":
             balance -= 1
-        elif c == ")":
+        elif char == ")":
             if balance == 0:
                 return False
             balance += 1
     return balance == 0
-

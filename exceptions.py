@@ -1,3 +1,9 @@
+"""
+Auther: Arad Arbel
+Description: this module contains all the exceptions that might come by using the calculator.
+"""
+
+
 class CalculatorException(Exception):
     def __init__(self, message):
         super().__init__(message)
