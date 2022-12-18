@@ -10,8 +10,9 @@ from validation import validate
 
 WELCOME_MESSAGE = "Welcome to the Omega Calculater." \
                   "This calculater is very unique and has a lot of special operators like:" \
-                  " $ - maximum, & - minimum,@ - average, ~ - negative, # - digit sum" \
-                  "Have fun solving equations. "
+                  " $ - maximum, & - minimum,@ - average, ~ - negative, # - digit sum "\
+                  "and of course also all the other simple operators"
+
 EXIT_MESSAGE = "Bye bye"
 
 

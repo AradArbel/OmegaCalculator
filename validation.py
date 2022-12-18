@@ -1,6 +1,6 @@
 from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedParenthesis, UnsupportedChar, EmptyInput
 from custom_operator import Operator
-from expression_utils import remove_spaces, get_next, possible_places, LEGAL_CHARACTERS
+from expression_utils import remove_spaces, get_next, possible_places, LEGAL_CHARACTERS, cancel_minus_signs
 
 """
 Auther: Arad Arbel
@@ -21,7 +21,7 @@ def validate_priority(sub_expressions: list, priority) -> list:
     while current_place < len(sub_expressions):
         if type(sub_expressions[current_place]) is Operator\
                 and sub_expressions[current_place].get_priority() == priority:
-            places = possible_places(sub_expressions, current_place)
+            places = possible_places(sub_expressions, updated_sub_expressions, current_place)
             if "middle" in sub_expressions[current_place].get_places():
                 if "middle" not in places and ["middle"] == sub_expressions[current_place].get_places():
                     raise InsufficientArguments(places, sub_expressions[current_place].get_sign())
@@ -66,17 +66,28 @@ def validate(exp: str) -> None:
     for char in exp:
         if char not in LEGAL_CHARACTERS:
             raise UnsupportedChar(char)
-    sub_expressions = []
+    sub_expressions = __to_sub_expressions(exp)
+    for priority_level in range(6, 0, -1):
+        sub_expressions = validate_priority(sub_expressions, priority_level)
+
+
+def __to_sub_expressions(exp: str) -> list:
+    """
+    splits an expression to sub expressions
+    :param exp: original expression
+    :return: a list of the sub expressions
+    """
+    sub_exps = []
     position = 0
     while position < len(exp):
         position, sub_exp = get_next(exp, position)
         if type(sub_exp) is str and sub_exp[0] == "(":
-            validate(sub_exp[1:-1])
-            sub_expressions.append('1')
+            if not validate(sub_exp[1:-1]):
+                return []
+            sub_exps.append('1')
         else:
-            sub_expressions.append(sub_exp)
-    for priority_level in range(6, 0, -1):
-        sub_expressions = validate_priority(sub_expressions, priority_level)
+            sub_exps.append(sub_exp)
+    return cancel_minus_signs(sub_exps)
 
 
 def balanced_parentheses(exp: str) -> bool:

@@ -64,3 +64,8 @@ class TooManyDecimalPoints(CalculatorException):
 class EmptyInput(CalculatorException):
     def __init__(self):
         super().__init__("Error: empty input")
+
+
+class ComplexNumberError(CalculatorException):
+    def __init__(self):
+        super().__init__("Error: complex number not allowed")
