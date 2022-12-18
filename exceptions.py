@@ -51,6 +51,11 @@ class DivisionByZero(CalculatorException):
         super().__init__("Error: division by zero")
 
 
+class PowerByZeroUndefined(CalculatorException):
+    def __init__(self):
+        super().__init__("Error: zero to the power zero is undefined")
+
+
 class ModuloByZero(CalculatorException):
     def __init__(self):
         super().__init__("Error: modulo by zero")
@@ -64,6 +69,11 @@ class TooManyDecimalPoints(CalculatorException):
 class EmptyInput(CalculatorException):
     def __init__(self):
         super().__init__("Error: empty input")
+
+
+class EmptyBrackets(CalculatorException):
+    def __init__(self):
+        super().__init__("Error: empty brackets")
 
 
 class ComplexNumberError(CalculatorException):

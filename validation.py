@@ -1,4 +1,5 @@
-from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedParenthesis, UnsupportedChar, EmptyInput
+from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedParenthesis, UnsupportedChar, EmptyInput, \
+    EmptyBrackets
 from custom_operator import Operator
 from expression_utils import remove_spaces, get_next, possible_places, LEGAL_CHARACTERS, cancel_minus_signs
 
@@ -19,7 +20,7 @@ def validate_priority(sub_expressions: list, priority) -> list:
     updated_sub_expressions = []
     current_place = 0
     while current_place < len(sub_expressions):
-        if type(sub_expressions[current_place]) is Operator\
+        if type(sub_expressions[current_place]) is Operator \
                 and sub_expressions[current_place].get_priority() == priority:
             places = possible_places(sub_expressions, updated_sub_expressions, current_place)
             if "middle" in sub_expressions[current_place].get_places():
@@ -60,6 +61,8 @@ def validate(exp: str) -> None:
     """
     if exp == "":
         raise EmptyInput
+    if empty_brackets(exp):
+        raise EmptyBrackets
     exp = remove_spaces(exp)
     if not balanced_parentheses(exp):
         raise UnBalancedParenthesis
@@ -105,3 +108,17 @@ def balanced_parentheses(exp: str) -> bool:
                 return False
             balance += 1
     return balance == 0
+
+
+def empty_brackets(exp: str) -> bool:
+    """
+    validates brackets with content
+    :param exp: expression to validate
+    :return: True if brackets are not empty, False otherwise
+    """
+    for char in range(len(exp)):
+        if exp[char] == "(" and exp[char+1] == ")":
+            return True
+    return False
+
+

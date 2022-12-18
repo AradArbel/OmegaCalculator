@@ -1,4 +1,5 @@
-from exceptions import DivisionByZero, ModuloByZero, NegativeFactorial, FloatFactorial, ComplexNumberError
+from exceptions import DivisionByZero, ModuloByZero, NegativeFactorial, FloatFactorial, ComplexNumberError, \
+    PowerByZeroUndefined
 
 """
 Auther: Arad Arbel
@@ -39,6 +40,7 @@ def division(operand1: float, operand2: float) -> float:
     :param: two operands
     :return: the result of the equation.
     """
+    # division by zero check
     if float(operand2) == 0:
         raise DivisionByZero
     return float(operand1) / float(operand2)
@@ -50,7 +52,12 @@ def power(base: float, exponent: float) -> float:
     :param: base and exponent
     :return: the result of the equation.
     """
+    # zero power zero check
+    if base == 0 and exponent == 0:
+        raise PowerByZeroUndefined
+
     solution = pow(float(base), float(exponent))
+    # complex check
     if type(solution) is complex:
         raise ComplexNumberError
     else:
@@ -64,6 +71,7 @@ def modulo(operand1: float, operand2: float) -> float:
     :return: the result of the equation.
     """
 
+    # modulo by zero check
     if float(operand2) == 0:
         raise ModuloByZero
     return float(operand1) % float(operand2)
@@ -113,9 +121,10 @@ def factorial(operand1: float) -> float:
     :param: one operand
     :return: the result of the equation.
     """
-
+    # negative factorial check
     if float(operand1) < 0:
         raise NegativeFactorial
+    # float factorial check
     if int(float(operand1)) != float(operand1):
         raise FloatFactorial
     fact = 1

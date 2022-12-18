@@ -35,8 +35,8 @@ def __to_sub_expressions(exp: str) -> list:
     while position < len(exp):
         position, sub_exp = get_next(exp, position)
         if type(sub_exp) is str and sub_exp[0] == "(":
-            c = calculate(sub_exp[1:-1])
-            sub_exps.append(c)
+            calc = calculate(sub_exp[1:-1])
+            sub_exps.append(calc)
         else:
             sub_exps.append(sub_exp)
     return cancel_minus_signs(sub_exps)
