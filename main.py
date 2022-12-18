@@ -1,9 +1,8 @@
-from user import interface
-
 """
 Auther: Arad Arbel
 Description: this module contains the main program, from here the user run the calculator.
 """
+from user import interface
 
 if __name__ == '__main__':
     interface()
@@ -14,7 +13,7 @@ if __name__ == '__main__':
 # validate("5*9+2.22.5+2.1")
 # validate("(((1+5))(")
 # validate("5**9")
-#        validate("(2+4))(")
+# validate("(2+4))(")
 # validate("fdhasfdhsafsda")
 # validate("")
 #       simple_equations = ['1+2', '5*7', '1-5', '5/7', '10^2', '5%3', '4 $  2', '3 $ 5', '2 & 3', '2 @ 3', '~5', '5!',

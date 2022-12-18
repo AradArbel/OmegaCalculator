@@ -1,4 +1,7 @@
-import operators
+"""
+Auther: Arad Arbel
+Description: this module defines operator class .
+"""
 
 # MAX_PRIORITY = 6
 

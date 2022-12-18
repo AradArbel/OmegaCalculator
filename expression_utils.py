@@ -1,12 +1,14 @@
-from custom_operator import Operator, OPERATORS_NAME
-from exceptions import TooManyDecimalPoints
-
 """
 Auther: Arad Arbel
 Description: this module contains utility functions that handle the equations.
  """
+from custom_operator import Operator, OPERATORS_NAME
+from exceptions import TooManyDecimalPoints
+
 
 LEGAL_CHARACTERS = "1234567890()." + "".join(OPERATORS_NAME.keys())
+
+WHITE_SPACES = "" + " " + "\n"+"\t"
 
 
 def remove_spaces(exp: str) -> str:

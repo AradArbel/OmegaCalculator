@@ -1,11 +1,10 @@
-import operators
-from custom_operator import Operator, OPERATORS_NAME
-from expression_utils import remove_spaces, get_next, possible_places, cancel_minus_signs
-
 """
 Auther: Arad Arbel
 Description: this module contains the functions which solving the equation using all the helper functions below.
 """
+import operators
+from custom_operator import Operator, OPERATORS_NAME
+from expression_utils import remove_spaces, get_next, possible_places, cancel_minus_signs
 
 
 def calculate(exp: str) -> float:

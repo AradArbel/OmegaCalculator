@@ -1,13 +1,13 @@
-from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedParenthesis, UnsupportedChar, EmptyInput, \
-    EmptyBrackets
-from custom_operator import Operator
-from expression_utils import remove_spaces, get_next, possible_places, LEGAL_CHARACTERS, cancel_minus_signs
-
 """
 Auther: Arad Arbel
 Description: this module contains the validation functions which check if the equation is 
 written according to the standard rules.
  """
+from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedParenthesis, UnsupportedChar, EmptyInput, \
+    EmptyBrackets
+from custom_operator import Operator
+from expression_utils import remove_spaces, get_next, possible_places, LEGAL_CHARACTERS, cancel_minus_signs, \
+    WHITE_SPACES
 
 
 def validate_priority(sub_expressions: list, priority) -> list:
@@ -59,19 +59,20 @@ def validate(exp: str) -> None:
     :param exp: expression to validate
     :return: None
     """
-    if exp == "":
-        raise EmptyInput
-    if empty_brackets(exp):
-        raise EmptyBrackets
+    for item in WHITE_SPACES:
+        if exp == item:
+            raise EmptyInput
     exp = remove_spaces(exp)
-    if not balanced_parentheses(exp):
-        raise UnBalancedParenthesis
     for char in exp:
         if char not in LEGAL_CHARACTERS:
             raise UnsupportedChar(char)
+    if not balanced_parentheses(exp):
+        raise UnBalancedParenthesis
     sub_expressions = __to_sub_expressions(exp)
     for priority_level in range(6, 0, -1):
         sub_expressions = validate_priority(sub_expressions, priority_level)
+    if empty_brackets(exp):
+        raise EmptyBrackets
 
 
 def __to_sub_expressions(exp: str) -> list:

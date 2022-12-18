@@ -1,10 +1,9 @@
-from exceptions import DivisionByZero, ModuloByZero, NegativeFactorial, FloatFactorial, ComplexNumberError, \
-    PowerByZeroUndefined
-
 """
 Auther: Arad Arbel
 Description: this module contains the all the operators calculation functions .
 """
+from exceptions import DivisionByZero, ModuloByZero, NegativeFactorial, FloatFactorial, ComplexNumberError, \
+    PowerByZeroUndefined
 
 
 def addition(operand1: float, operand2: float) -> float:
