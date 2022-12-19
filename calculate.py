@@ -54,10 +54,12 @@ def __calculate_priority(sub_exps, priority):
         if type(sub_exps[current_length]) is Operator and sub_exps[current_length].get_priority() == priority:
             op_func = getattr(operators, OPERATORS_NAME[sub_exps[current_length].get_sign()])
             places = possible_places(sub_exps, updated_sub_exps, current_length)
+            # Middle operators handle
             if "middle" in places and "middle" in sub_exps[current_length].get_places():
                 updated_sub_exps[-1] = (op_func(updated_sub_exps[-1], sub_exps[current_length + 1]))
                 current_length += 2
                 continue
+            # Left operators handle
             if "left" in places and "left" in sub_exps[current_length].get_places():
                 if sub_exps[current_length].get_sign() == '-':
                     if str(sub_exps[current_length + 1])[0] == '-':
@@ -68,8 +70,10 @@ def __calculate_priority(sub_exps, priority):
                     updated_sub_exps.append(op_func(sub_exps[current_length + 1]))
                 current_length += 2
                 continue
+            # Right operators handle
             if "right" in places and "right" in sub_exps[current_length].get_places():
                 updated_sub_exps[-1] = op_func(updated_sub_exps[-1])
+        # Update to the next operator
         else:
             updated_sub_exps.append(sub_exps[current_length])
         current_length += 1

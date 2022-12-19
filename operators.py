@@ -71,7 +71,6 @@ def modulo(operand1: float, operand2: float) -> float:
     :param: two operands
     :return: the result of the equation.
     """
-
     # modulo by zero check
     if float(operand2) == 0:
         raise ModuloByZero
@@ -131,6 +130,7 @@ def factorial(operand: float) -> float:
     if operand == 0:
         return 1
     solution = float(operand) * factorial(float(operand)-1)
+    # over max value check
     if solution == float("inf"):
         raise OverMaxValue
     return solution

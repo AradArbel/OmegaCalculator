@@ -23,12 +23,14 @@ def validate_priority(sub_expressions: list, priority) -> list:
         if type(sub_expressions[current_place]) is Operator \
                 and sub_expressions[current_place].get_priority() == priority:
             places = possible_places(sub_expressions, updated_sub_expressions, current_place)
+            # Check of valid way for sub equation of middle operator
             if "middle" in sub_expressions[current_place].get_places():
                 if "middle" not in places and ["middle"] == sub_expressions[current_place].get_places():
                     raise InsufficientArguments(places, sub_expressions[current_place].get_sign())
-                else:
+                elif ["middle"] == sub_expressions[current_place].get_places() :
                     current_place += 2
                     continue
+            # Check of valid way for sub equation of left operator
             if "left" in sub_expressions[current_place].get_places():
                 if "left" not in places and "right" not in sub_expressions[current_place].get_places():
                     raise InsufficientArguments(places, sub_expressions[current_place].get_sign())
@@ -36,12 +38,14 @@ def validate_priority(sub_expressions: list, priority) -> list:
                     updated_sub_expressions.append(sub_expressions[current_place + 1])
                     current_place += 2
                     continue
+            # Check of valid way for sub equation of right operator
             if "right" in sub_expressions[current_place].get_places():
                 if "right" not in places:
                     raise InsufficientArguments(places, sub_expressions[current_place].get_sign())
                 else:
                     if type(updated_sub_expressions[-1]) is not str:
                         updated_sub_expressions.append(sub_expressions[current_place - 1])
+        # Check if each operand came after operator
         elif type(sub_expressions[current_place]) is str:
             if len(updated_sub_expressions) > 0 and type(updated_sub_expressions[-1]) is not Operator:
                 raise ConsecutiveArguments

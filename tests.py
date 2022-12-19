@@ -3,10 +3,7 @@ Auther: Arad Arbel
 Description: this module contains the pytest testing for the calculator.
 """
 
-import pytest
-
-import exceptions
-from exceptions import CalculatorException, DivisionByZero, UnsupportedChar
+from exceptions import CalculatorException, UnsupportedChar
 from user import result
 
 
@@ -71,6 +68,25 @@ def test_complicated_equations():
                              '6$(3*-234#^3 / 12.72@3.5)-100%(13*2.5)': 'result: 3.5',
                              '((5!*~-3)$777)/3.8-((5@3)&(6$3))': 'result: 200.47368421052633',
                              '67.76#*-42&32.32/--3@~7^2-(3!^0.5)---3': 'result: -278.44948974278316',
-                             '~-39 ^ 2.5 - 0.013#@0.14# + 8!* -5%3 + 5%-3': 'result: 49813.141955563966'}
+                             '~-39 ^ 2.5 - 0.013#@0.14# + 8!* -5%3 + 5%-3': 'result: 49813.141955563966',
+                             '---~50*(3$3)^2-(5%2)/(2!+~3)@(567&342-22#)': 'result: 449.9940652818991',
+                             '(5+7-7*8+9^2)/2-38&37+(17 @2---17#)*~1': 'result: -20.0',
+                             '385600.77#/14%13^5+(345&2570)/9%3@(4.2$3.2)': 'result: 227.66666666666669',
+                             '3!!@--3%(276587*126)%3+7/7^7': 'result: 1.5000084998597523'}
     for equation, solution in complicated_equations.items():
         assert solution == result(equation)
+
+
+def test_way2_cancel_minuses():
+    """
+    This function tests sets of equations with many minuses between operands.
+    :return: None.
+    """
+    minus_equations = {'2--3': 'result: 5.0', '2--3!': 'result: 8.0', '2---3#': 'result: -1.0', '--3': 'result: 3.0',
+                       '2---3!': 'result: -4.0', '2--~3': 'result: -1.0'}
+    minus_equations_errors = ["2-~3!", "-3!"]
+    for equation, solution in minus_equations.items():
+        assert solution == result(equation)
+    for equation in minus_equations_errors:
+        solution = result(equation)
+        assert isinstance(solution, CalculatorException)
