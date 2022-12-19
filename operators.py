@@ -3,7 +3,7 @@ Auther: Arad Arbel
 Description: this module contains the all the operators calculation functions .
 """
 from exceptions import DivisionByZero, ModuloByZero, NegativeFactorial, FloatFactorial, ComplexNumberError, \
-    PowerByZeroUndefined
+    PowerByZeroUndefined, OverMaxValue
 
 
 def addition(operand1: float, operand2: float) -> float:
@@ -52,15 +52,17 @@ def power(base: float, exponent: float) -> float:
     :return: the result of the equation.
     """
     # zero power zero check
-    if base == 0 and exponent == 0:
+    if float(base) == 0 and float(exponent) == 0:
         raise PowerByZeroUndefined
 
     solution = pow(float(base), float(exponent))
     # complex check
     if type(solution) is complex:
         raise ComplexNumberError
-    else:
-        return solution
+    # over max value check
+    if solution == float("inf"):
+        raise OverMaxValue
+    return solution
 
 
 def modulo(operand1: float, operand2: float) -> float:
@@ -83,7 +85,7 @@ def maximum(operand1: float, operand2: float) -> float:
     :return: the result of the equation.
     """
 
-    return float(operand1) if operand1 >= operand2 else float(operand2)
+    return float(operand1) if float(operand1) >= float(operand2)else float(operand2)
 
 
 def minimum(operand1: float, operand2: float) -> float:
@@ -92,7 +94,7 @@ def minimum(operand1: float, operand2: float) -> float:
     :param: two operands
     :return: the result of the equation.
     """
-    return float(operand1) if operand1 <= operand2 else float(operand2)
+    return float(operand1) if float(operand1) <= float(operand2) else float(operand2)
 
 
 def average(operand1: float, operand2: float) -> float:
@@ -105,46 +107,47 @@ def average(operand1: float, operand2: float) -> float:
     return (float(operand1) + float(operand2)) / 2
 
 
-def negative(operand1: float) -> float:
+def negative(operand: float) -> float:
     """
     the function calculate negative number of a number.
     :param: one operand
     :return: the result of the equation.
     """
-    return float(operand1) * -1
+    return float(operand) * -1
 
 
-def factorial(operand1: float) -> float:
+def factorial(operand: float) -> float:
     """
     the function calculate factorial of a number.
     :param: one operand
     :return: the result of the equation.
     """
     # negative factorial check
-    if float(operand1) < 0:
+    if float(operand) < 0:
         raise NegativeFactorial
     # float factorial check
-    if int(float(operand1)) != float(operand1):
+    if int(float(operand)) != float(operand):
         raise FloatFactorial
-    fact = 1
-    for i in range(1, int(operand1) + 1):
-        fact = fact * i
-    return float(fact)
+    if operand == 0:
+        return 1
+    solution = float(operand) * factorial(float(operand)-1)
+    if solution == float("inf"):
+        raise OverMaxValue
+    return solution
 
 
-def sum_digit(operand1: any) -> float:
+def sum_digit(operand: any) -> float:
     """
     the function calculate the digit sum of a number.
     :param: one operand
     :return: the result of the equation.
     """
-    operand1 = str(operand1)
+    operand = str(operand)
     digit_sum = 0
     sign = 1
-    if operand1[0] == '-':
+    if operand[0] == '-':
         sign = -1
-    # Single line that calculates sum of digits
-    for i in range(len(operand1)):
-        if operand1[i] not in ".-":
-            digit_sum += float(operand1[i])
+    for i in range(len(operand)):
+        if operand[i] not in ".-":
+            digit_sum += float(operand[i])
     return sign * digit_sum

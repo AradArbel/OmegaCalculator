@@ -11,7 +11,7 @@ class CalculatorException(Exception):
 
 class UnBalancedParenthesis(CalculatorException):
     def __init__(self):
-        super().__init__("Error: unbalanced parentheses")
+        super().__init__("Error: unbalanced parentheses, each '(' need to have ')'")
 
 
 class NegativeFactorial(CalculatorException):
@@ -22,6 +22,11 @@ class NegativeFactorial(CalculatorException):
 class FloatFactorial(CalculatorException):
     def __init__(self):
         super().__init__("Error: non integer factorial undefined")
+
+
+class OverMaxValue(CalculatorException):
+    def __init__(self):
+        super().__init__("Error: thr result of the equation is over max value")
 
 
 class UnsupportedChar(CalculatorException):

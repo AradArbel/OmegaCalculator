@@ -4,7 +4,7 @@ Description: this module contains the operator class and operators dictionaries 
 """
 
 OPERATORS_PRIORITY = {'+': 1, '-': 1, '*': 2, '/': 2, '^': 3,
-                      '%': 4, '$': 5, '&': 5, '@': 6, '~': 6, '!': 6,
+                      '%': 4, '$': 5, '&': 5, '@': 5, '~': 6, '!': 6,
                       '#': 6}
 
 OPERATORS_PLACE = {'+': ['middle'], '-': ['middle', 'left'], '*': ['middle'], '/': ['middle'], '^': ['middle'],

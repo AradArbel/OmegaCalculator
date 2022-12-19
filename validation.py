@@ -3,7 +3,7 @@ Auther: Arad Arbel
 Description: this module contains the validation functions which check if the equation is 
 written according to the standard rules.
  """
-from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedParenthesis, UnsupportedChar, EmptyInput, \
+from exceptions import InsufficientArguments, ConsecutiveArguments, UnBalancedParenthesis, UnsupportedChar, EmptyInput,\
     EmptyBrackets
 from custom_operator import Operator
 from expression_utils import remove_spaces, get_next, possible_places, LEGAL_CHARACTERS, cancel_minus_signs, \
@@ -118,8 +118,6 @@ def empty_brackets(exp: str) -> bool:
     :return: True if brackets are not empty, False otherwise
     """
     for char in range(len(exp)):
-        if exp[char] == "(" and exp[char+1] == ")":
+        if exp[char] == "(" and exp[char + 1] == ")":
             return True
     return False
-
-
